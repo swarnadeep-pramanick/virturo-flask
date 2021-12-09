@@ -1,0 +1,43 @@
+img {
+  border: 0;
+  border-style: none;
+  max-width: 100%;
+  display: inherit;
+}
+
+*:focus {
+  outline: none;
+}
+
+.clearfix::after,
+.clearfix::before {
+  content: " ";
+  display: table;
+}
+
+.clearfix,
+.clearfix::after {
+  clear: both;
+}
+
+.simplebar-track .simplebar-scrollbar {
+  width: 8px;
+}
+
+.simplebar-track .simplebar-scrollbar:before {
+  background: #0779E4 !important;
+  opacity: 1 !important;
+  border-radius: 100px;
+}
+
+.simplebar-track:after {
+  content: '';
+  top: 2px;
+  bottom: 2px;
+  display: block;
+  position: absolute;
+  width: 2px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.1);
+}
+/*# sourceMappingURL=core.css.map */

@@ -1,0 +1,199 @@
+{%  extends 'layout/admin.html'   %}
+
+{% block title  %}
+  Events
+{%  endblock   %}
+
+{%block styles %}
+    {% include 'includes/styles/datatables'  %}
+    <style>
+     .slugInp{
+            width: 85%;
+            border: 1px solid grey;
+            height: calc(1.5rem+ 0.9rem+ 2px);
+            padding: 0.45rem 0.9rem;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.2rem;
+        }
+        #event_link{
+            font-weight: 700;
+            white-space: nowrap;
+        }
+    </style>
+{%  endblock %}
+
+{%  block page_title  %}
+    Events
+{% endblock  %}
+<!-- include libraries(jQuery, bootstrap) -->
+
+<!-- include summernote css/js -->
+
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active">Events</li>
+{% endblock  %}
+
+
+{%block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h3 class="card-title"><i class="fas fa-calendar-day"></i>&nbsp;&nbsp;Events</h3>
+                <div class="float-right"><button class="btn btn-success" onclick="CreateEvent()">Create Event</button></div>
+            </div>
+            <div id="showAlert" class="alert alert-success" role="alert" style="display: none">
+                <center>  Link Copied Successfully </center>
+            </div>
+            <div id="AlertDelete" class="alert alert-success" role="alert" style="display: none">
+                <center>  Event Deleted Successfully </center>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Event Name</th>
+                            <th>Url</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if events %}
+                            {%  for event in events  %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ event.name }}</td>
+                                <td id="copyTarget" style="cursor: pointer" data-id="{{ event.link }}" ondblclick="openPage(this)" onclick="copyclip(this)" data-des="{{ event.link }}">{{ event.link[:50] }}</td>
+                                <td>{{ event.start_date.strftime('%d-%m-%Y') }}</td>
+                                <td>{{ event.end_date.strftime('%d-%m-%Y') }}</td>
+                                
+                                <td>
+                                    <a href="#" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                    <a href="#" class="btn btn-warning"><i class="fas fa-tasks"></i></a>
+                                    <button onclick="deleteEvent(this)" data-id="{{ event.id }}" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            {%  endfor  %}
+                        {%  else  %}
+                            <tr>
+                                <td colspan="9"><center>No Data Available</center></td>
+                            </tr>
+                        {%  endif   %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade theme-modal" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Create Event</h5>
+        </div>
+        <form action="{{ url_for('EventCreate') }}" method="POST">
+            <div class="modal-body " id="eventData">
+                <div class="form-group">
+                    <label for="name">Event Name</label>
+                    <input type="text" id="event_name" name="name" class="form-control" required>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label for="name">Event Link</label><br>
+                    <input type="text" id="event_slug" name="event_slug" class="slugInp" required>
+                    <span id="event_link">.{{ request.base_url.split('/')[0]+'/'+request.base_url.split('/')[1] }}</span><br>
+                    <span style="color:red">**Note : Do Not Use <strong>Spaces Or Caps </strong> Between Subdomain Name, use '-' only if needed</span>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="name">Start Date</label>
+                        <input type="date" name="start_date" class="form-control" min="{{  current_date }}" required>
+                    </div>
+                    <div class="col">
+                        <label for="name">End Date</label>
+                        <input type="date" name="end_date" min="{{  current_date }}" class="form-control" required>
+                    </div>
+                </div><br>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeMod()">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+            </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
+{% block scripts %}
+<script>
+    function CreateEvent(){
+        $('#createModal').modal('toggle');
+    }
+    function closeMod(){
+        $('#createModal').modal('toggle');
+    }
+
+    function copyclip(e){
+
+      var link = e.getAttribute('data-des');
+      /* Copy the text inside the text field */
+      navigator.clipboard.writeText(link);
+
+      /* Alert the copied text */
+      // alert("Link Copied To Clipboard");
+      showMessage("Link Copied To Clipboard",'success');
+
+    }
+
+    function openPage(e){
+        var link = e.getAttribute("data-id");
+        window.open(link,'_blank');
+    }
+
+    function deleteEvent(e){
+      confirmDelete("Are you sure you want to DELETE Prize?","Confirm Prize Delete").then(confirmation=>{
+          if(confirmation){
+              var eventId = e.getAttribute('data-id');
+              var data = e.closest('tr');
+              $.post('#',{'id':eventId},function(response){
+                  if(response.code == 200){
+                      data.remove();
+                      showMessage(response.message,'success');
+                  }
+                  else{
+                      showMessage(response.message,'error');
+                  }
+                  
+                  
+              });
+          }
+      });
+    }
+   $(document).ready(function(){
+       $('#event_name').on('input',function(){
+          let event_name = $(this).val();
+          let slug = event_name.toLowerCase().replaceAll(" ","-");
+      
+          $('#event_slug').val(slug);
+       });
+   });
+</script>
+
+{% endblock  %}
+
+
+  

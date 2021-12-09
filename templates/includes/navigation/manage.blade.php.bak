@@ -1,0 +1,285 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<li>
+    <a href="{{ route("teacher.dashboard") }}"  class="nav-second-level"> 
+        <i class="fas fa-tachometer-alt"></i>
+        <span>
+            Dashboard
+        </span>  
+    </a>
+</li>
+<li>
+    <a href="#report" data-toggle="collapse">
+        <i class="mdi mdi-file-multiple"></i>
+        <span> Reports <span class="badge  badge-success" >NEW</span> </span>
+    </a>
+    <div class="collapse" id="report">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("event.Dashboard",['id'=>$id]) }}">General</a>
+            </li>
+            <li>
+                <a href="{{ route("event.leaderboard",['id'=>$id]) }}">Leaderboard</a>
+            </li>
+            <!-- <li>
+                <a href="{{ route("reports.auditorium") }}">Auditorium</a>
+            </li> -->
+            @php
+                $session_rooms = getRoomsEventee( ($id));
+            @endphp
+            @if($session_rooms != 0)
+                @foreach($session_rooms as $master_room => $rooms)
+                    @if($master_room != "private" )
+                    <li>
+                        <a href="#{{$master_room}}" data-toggle="collapse">{{ ucfirst( str_replace("_"," ", $master_room ) )  }}</a>
+                
+                        <div class="collapse" id="{{$master_room}}">
+                            <ul class="nav-sesond-level">
+                                @foreach($rooms as $room)
+                                    <li>
+                                        <a href="{{ route("event.workshop", ['name' => $room,'id'=>$id]) }}">{{ $room }}</a>
+                                    </li>
+                                @endforeach
+                            
+                            </ul>
+                        </div>
+                    </li>
+                    @endif
+                
+                @endforeach
+            @endif
+        </ul>
+    </div>
+</li>
+
+<li>
+
+    <a href="#booth-reports" data-toggle="collapse">
+        <i class="mdi mdi-file-multiple"></i>
+        <span>Booth Reports <span class="badge  badge-success" >NEW</span> </span>
+    </a>
+    @php
+        $booths = \App\Booth::where('event_id',$id);
+    @endphp
+    <div class="collapse" id="booth-reports">
+        <ul class="nav-second-level">
+            @if($booths->count() > 0)
+                @foreach($booths->get() as $booth)
+                <li>
+                    <a href="{{ route("reports.booth", ['id' => $booth->id]) }}">{{ $booth->name }}</a>
+                </li>
+                @endforeach
+            @endif
+        </ul>
+    </div>
+</li>
+<li class="menu-title">Administration</li>
+<li>
+    <a href="#users" data-toggle="collapse">
+        <i data-feather="users"></i>
+        <span> Users</span>
+    </a>
+    <div class="collapse" id="users">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.user",['id'=>$id]) }}">Manage</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.user.create",['id'=>$id]) }}">Create</a>
+            </li>
+        </ul>
+    </div>
+</li><li>
+    <a href="#form" data-toggle="collapse">
+        <i class="fas fa-align-justify"></i>
+        <span> Form</span>
+    </a>
+    <div class="collapse" id="form">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.form",['id'=>$id]) }}">Manage</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.form.create",['id'=>$id]) }}">Create</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.form.addfield",['id'=>$id]) }}">Add Field</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="{{ route('eventee.dataEntry',$id) }}"  class="nav-second-level">
+        <i data-feather="users"></i>
+        <span> Data Entry</span>
+    </a>
+</li>
+<li>
+    <a href="#notification" data-toggle="collapse" >
+        <i data-feather="bell"></i>
+        <span> Notifications</span>
+    </a>
+    <div class="collapse" id="notification">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.notification",$id) }}">Manage</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.notification.create",$id) }}">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+<li>
+    <a href="#polls" data-toggle="collapse">
+        <i data-feather="bar-chart-2"></i>
+        <span>Polls</span>
+    </a>
+    <div class="collapse" id="polls">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.poll",$id) }}">Manage</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+<li>
+    <a href="#QNA" data-toggle="collapse">
+        <i class="fa fa-question-circle"></i>
+        <span>QnA</span>
+    </a>
+    <div class="collapse" id="QNA">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.qna",$id) }}">Manage</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+<li>
+    <a href="#announceAdmin" data-toggle="collapse">
+        <i class="fa fa-bullhorn" aria-hidden="true"></i>
+        <span>Announcements</span>
+    </a>
+    <div class="collapse" id="announceAdmin">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.announce",$id) }}">Manage</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+<li>
+    <a href="{{ route("eventee.videoArchive",$id) }}"  class="nav-second-level"> 
+        <span>
+            Past Videos Archive
+        </span>  
+    </a>
+</li>
+
+<li>
+    <a href="{{ route("eventee.license",$id) }}"  class="nav-second-level"> 
+        <span>
+           Licence Upgrade
+        </span>  
+    </a>
+</li>
+
+
+
+<li class="menu-title">Site Content</li>
+<li>
+    <a href="{{ route("eventee.options",$id) }}">
+        <i data-feather="file-text"></i>
+        <span> General Content</span>
+    </a>
+</li>
+
+<li>
+    <a href="#menu" data-toggle="collapse">
+        <i class="fa fa-bars"></i>
+        <span> Menu</span>
+    </a>
+    <div class="collapse" id="menu">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.menu",$id) }}">Manage Nav</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.menu.footer",$id) }}">Manage Footer</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#booths" data-toggle="collapse">
+        <i data-feather="grid"></i>
+        <span> Booths </span>
+    </a>
+    <div class="collapse" id="booths">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.booth",$id) }}">Manage</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.booth.create",$id) }}">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+<li>
+    <a href="#pages" data-toggle="collapse">
+        <i class="mdi mdi-file-multiple"></i>
+        <span> Pages</span>
+    </a>
+    <div class="collapse" id="pages">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.pages.index",$id) }}">Manage</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.pages.create",$id) }}">Create</a>
+            </li>
+            <li>
+                <a href="{{ route("elobby",$id) }}">Lobby</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#sessions" data-toggle="collapse">
+        <i class="mdi mdi-play"></i>
+        <span> Sessions</span>
+    </a>
+    <div class="collapse" id="sessions">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.sessions.index",$id) }}">Manage</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.sessions.create",$id) }}">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#sessionrooms" data-toggle="collapse">
+        <i  data-feather="home"></i>
+        <span> Session Rooms</span>
+    </a>
+    <div class="collapse" id="sessionrooms">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ route("eventee.sessionrooms.index",$id) }}">Manage</a>
+            </li>
+            <li>
+                <a href="{{ route("eventee.sessionrooms.create",$id) }}">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>

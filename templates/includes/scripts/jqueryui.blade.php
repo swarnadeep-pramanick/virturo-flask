@@ -1,0 +1,1 @@
+<script type="text/javascript" src="{{asset('assets\libs\jquery-ui\jquery-ui.min.js')}}"></script>

@@ -1,0 +1,44 @@
+{%  extends 'layout/auth.html'  %}
+
+{%block title %}
+  Login
+{%endblock%}
+{%  block form   %}
+<form action="{{ url_for('confirm_login') }}" method="POST">
+   {{ form.csrf_token }}
+  <div class="form-group">
+    <div class="input-group">
+        {{form.email.label()}}
+        <div class="input-group input-group-merge">
+          {{form.email(class="field form-control")}}
+        </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="input-group">
+        {{form.password.label()}}
+        <div class="input-group input-group-merge">
+          {{form.password(class="field form-control")}}
+
+        <div class="input-group-append" data-password="false">
+            <div class="input-group-text">
+                <span class="password-eye"></span>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+    <br>
+    {{form.submit(class="log-btn theme-btn btn primary-filled")}}
+
+
+
+    <div class="clearfix"></div>
+</form>
+{% endblock %}
+
+
+{% block form_footer %}
+    <p class="text">Register As An Event Admin<a href="{{  url_for('register')  }}"> Click here</a></p>
+{% endblock %}

@@ -1,0 +1,52 @@
+.field:focus{
+    border-bottom: 3px solid #42DA12;
+    
+    
+}
+.field{
+    padding: 13px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0rem 1.5rem;
+    display: inline flexbox;
+    justify-content: space-evenly;
+    
+}
+.move{
+    display: inline-flexbox;
+    align-items: center;
+    justify-content: space-between;
+}
+.move input{
+    width: 25rem;
+   
+}
+.move2{
+    display: inline-flexbox;
+    align-items: center;
+    justify-content: space-between;
+}
+.move2 input{
+    width: 16.5rem;
+}
+.move3{
+    display: inline-flexbox;
+    align-items: center; 
+    justify-content: space-between;
+}
+.move3 input{
+    width: 100rem;
+}
+.move4{
+    display: inline-flexbox;
+    align-items: center;
+    justify-content: space-between;
+}
+.move4 select{
+    width: 25rem;
+}
+.log-btn:hover{
+    background-color: #264b1a;
+    border-bottom: 3px solid #21b8cc;
+    padding: 12px 24px;
+}

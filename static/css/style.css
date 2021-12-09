@@ -1,0 +1,88 @@
+img {
+  border: 0;
+  border-style: none;
+  max-width: 100%;
+  display: inherit;
+}
+
+*:focus {
+  outline: none;
+}
+
+.clearfix::after,
+.clearfix::before {
+  content: " ";
+  display: table;
+}
+
+.clearfix,
+.clearfix::after {
+  clear: both;
+}
+
+.simplebar-track .simplebar-scrollbar {
+  width: 8px;
+}
+
+.simplebar-track .simplebar-scrollbar:before {
+  background: #0779E4 !important;
+  opacity: 1 !important;
+  border-radius: 100px;
+}
+
+.simplebar-track:after {
+  content: '';
+  top: 2px;
+  bottom: 2px;
+  display: block;
+  position: absolute;
+  width: 2px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.chat-contact-listitem {
+  padding: 12px 0;
+  cursor: pointer;
+}
+
+.chat-contact-listitem .chat-contact-listitem-thum {
+  display: inline-block;
+  width: 28px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.chat-contact-listitem .chat-contact-listitem-thum img {
+  width: 28px;
+  height: 28px;
+  overflow: hidden;
+  display: inherit;
+}
+
+.chat-contact-listitem .chat-contact-listitem-name {
+  display: inline-block;
+  font-size: 15px;
+  vertical-align: middle;
+  width: 195px;
+  position: relative;
+  letter-spacing: -.1px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+.chat-contact-listitem .chat-contact-listitem-name::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: rgba(20, 20, 20, 0.1);
+  position: absolute;
+  left: 0;
+  bottom: -18px;
+}
+
+.dark .chat-contact-listitem .chat-contact-listitem-name::before {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+/*# sourceMappingURL=style.css.map */
