@@ -1,9 +1,10 @@
 from app.app import app, login_manager, db
-from flask import render_template, Response, request, url_for, flash
+from flask import render_template, Response, request, url_for, flash, jsonify
 from forms import LoginForm, RegistrationForm
 from flask import request, redirect, session
 from flask_login import login_required, login_user, current_user
 from datetime import datetime, timedelta, date
+import routes.errorhandler
 
 from model.db import User, Event
 from helper import is_live
@@ -72,6 +73,10 @@ def confirm_register():
                 flash("Same Email Address Already Exist")
                 return redirect(url_for('register'))
 
+###############################
+####Eventee Dashboard#########
+##############################
+
 
 @app.route('/dashboard')
 @login_required
@@ -136,13 +141,34 @@ def EventCreate():
             flash("Same Event Already Exist")
             return redirect(url_for('EventCreate'))
 
-# ##Error Handling
-#
-#
+
+@app.route('/events/edit/<event_id>')
+@login_required
+def EventEdit(event_id):
+    event = Event.query.filter_by(id=event_id).first()
+    return render_template('eventee/event/edit.html', event=event)
 
 
-@login_manager.unauthorized_handler
-def unauthorized():
-    # do stuff
-    flash("Unauthorized")
-    return redirect(url_for('login'))
+@app.route('/events/update/<event_id>', methods=['POST'])
+@login_required
+def EventUpdate(event_id):
+
+    if request.method == 'POST':
+        event = Event.query.filter_by(id=event_id).first()
+        event.name = request.form['name']
+        event.slug = request.form['event_slug']
+        event.start_date = request.form['start_date']
+        event.end_date = request.form['end_date']
+        event.link = f"{request.form['event_slug']}.localhost:5000"
+        db.session.commit()
+        flash("Event Updated Successfully")
+        return redirect(url_for('Eventlist'))
+
+
+###########################
+##Event Dashboard#########
+##########################
+@app.route('/events/manage/<event_id>')
+@login_required
+def EventDashboard(event_id):
+    return render_template('eventee/dashboard.html', event_id=event_id)

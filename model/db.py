@@ -141,3 +141,15 @@ class SeenNotification(db.Model):
 
     def __repr__(self):
         return f"Seen Notification {self.seen}"
+
+
+class UserLocation(db.Model):
+    __tablename__ = 'user_locations'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    type = db.Column(db.String(80))
+    type_location = db.Column(db.String(150), nullable=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    current_status = db.Column(db.Boolean(), default=True)
+    created_at = db.Column(db.DateTime(), default=datetime.now())
+    updated_at = db.Column(db.DateTime(), default=datetime.now())

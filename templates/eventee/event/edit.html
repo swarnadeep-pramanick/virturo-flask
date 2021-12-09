@@ -1,0 +1,93 @@
+{%  extends 'layout/admin.html'   %}
+
+{% block title  %}
+  Events
+{%  endblock   %}
+
+{%block styles %}
+    {% include 'includes/styles/datatables'  %}
+    <style>
+     .slugInp{
+            width: 85%;
+            border: 1px solid grey;
+            height: calc(1.5rem+ 0.9rem+ 2px);
+            padding: 0.45rem 0.9rem;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.2rem;
+        }
+        #event_link{
+            font-weight: 700;
+            white-space: nowrap;
+        }
+    </style>
+{%  endblock %}
+
+{%  block page_title  %}
+    Events
+{% endblock  %}
+<!-- include libraries(jQuery, bootstrap) -->
+
+<!-- include summernote css/js -->
+
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active">Events</li>
+{% endblock  %}
+
+
+{%block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ url_for('EventUpdate',event_id =event.id) }}" method="POST">
+                    
+                    <div class="form-group">
+                        <label for="name">Event Name</label>
+                        <input type="text" id="event_name" name="name" value="{{ event.name }}" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Event Link</label><br>
+                        <input type="text" id="event_slug" name="event_slug" class="slugInp" value="{{ event.slug }}" required>
+                    </div>
+                   
+                        <div class="row">
+                            <div class="col">
+                                <label for="name">Start Date</label>
+                                <input type="date" name="start_date" value="{{ event.start_date }}"  class="form-control" required>
+                            </div>
+                            <div class="col">
+                                <label for="name">End Date</label>
+                                <input type="date" name="end_date" value="{{ event.end_date }}"  class="form-control" required>
+                            </div>
+                            
+                        </div><br>
+                   
+                       
+                   
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock   %}
+
+{%  block scripts  %}
+
+<script>
+    $(document).ready(function(){
+         $('#event_name').on('input',function(){
+            let event_name = $(this).val();
+            let slug = event_name.toLowerCase().replaceAll(" ","-");
+        
+            $('#event_slug').val(slug);
+         });
+     });
+</script>
+
+{%  endblock  %}

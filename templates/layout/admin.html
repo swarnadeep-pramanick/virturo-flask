@@ -20,7 +20,7 @@
     <link href="{{  url_for('static', filename='libs/sweetalert2/sweetalert2.min.css')  }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://coderthemes.com/ubold/layouts/assets/libs/nestable2/jquery.nestable.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-    
+
 
     <!-- icons -->
     <link rel="stylesheet" href="{{  url_for('static', filename='css/icons.min.css')  }}" type="text/css">
@@ -202,7 +202,7 @@
                     </a>
                 </a>
 
-           
+
            {%   if current_user.is_authenticated   %}
                 <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
                     <li>
@@ -217,7 +217,7 @@
 
                                 <span class="pro-user-name ml-1" style="font-size: 18px; font-weight: bold;">
 
-                                        
+
                                 </span>
                             </a>
                               {%   if  current_user.is_authenticated  %}
@@ -248,7 +248,7 @@
             <div class="clearfix"></div>
         </div>
             </div>
-            
+
             <!-- end navbar-custom -->
         </div>
         <!-- ========== Left Sidebar Start ========== -->
@@ -287,7 +287,7 @@
                         {%  block navigation    %}
                                 {% if current_user.role_id == "2" %}
                                     {% include "includes/navigation/admin.html" %}
-                                {% elif id  %}
+                                {% elif event_id  %}
                                     {%  include "includes/navigation/manage.html"  %}
                                 {%elif current_user.role_id ==  "3" %}
                                     {%  include "includes/navigation/exhibitor.html" %}
@@ -326,12 +326,12 @@
     <!-- ============================================================== -->
     <div class="content-page">
         <div class="content">
-            
+
             <!-- Start Content-->
             <div class="container-fluid">
 
                 <!-- start page title -->
-               
+
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box">
@@ -343,18 +343,30 @@
                                     </ol>
                                 </div>
                                 <h4 class="page-title">{% block page_title %}{% endblock %}</h4>
+                                {%  if get_flashed_messages()   %}
+                                    {%  for message in get_flashed_messages() %}
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <strong>{{  message  }}</strong>
+                                    </div>
+
+                                    {% endfor %}
+                                {%  endif  %}
                             </div>
                         </div>
                     </div>
-               
+
                 <!-- end page title -->
-               
+
 
             </div> <!-- container -->
             {%  block content  %}
             {%   endblock    %}
         </div> <!-- content -->
-       
+
         <!-- Footer Start -->
         <footer class="footer">
             <div class="container-fluid">

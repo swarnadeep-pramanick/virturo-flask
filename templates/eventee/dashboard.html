@@ -1,0 +1,427 @@
+{% extends 'layout/admin.html' %}
+
+
+{% block title %}
+    General Event Stats
+{%  endblock   %}
+
+{% block page_title %}
+    General Event Stats
+{%  endblock   %}
+
+{% block content %}
+
+<div class="row">
+
+<div class="col-md-6 col-xl-4  mb-3">
+    <div class="widget-rounded-circle card-box h-100">
+        <div class="row">
+            <div class="card-header">User Status</div>
+            <div id="piechart" style="left:0;width: 50rem; height: 20rem;"></div>
+        </div> <!-- end row-->
+    </div> <!-- end widget-rounded-circle-->
+</div>
+
+
+<div class="col-md-6 col-xl-4  mb-3">
+    <div class="widget-rounded-circle card-box h-100">
+        <div class="row">
+
+            <div class="card">
+                <div class="card-header">Session Room Active Users</div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Location Name</th>
+                                <th>Number of Users</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sesroomUSer">
+                            <td colspan="2"><center>No Data Available</center></td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- end row-->
+    </div> <!-- end widget-rounded-circle-->
+</div>
+
+<div class="col-md-6 col-xl-4  mb-3">
+    <div class="widget-rounded-circle card-box h-100">
+        <div class="row">
+
+            <div class="card">
+                <div class="card-header">Active Page Users</div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Location Name</th>
+                                <th>Number of Users</th>
+                            </tr>
+                        </thead>
+                        <tbody class="pageUSer">
+                            <td colspan="2"><center>No Data Available</center></td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- end row-->
+    </div> <!-- end widget-rounded-circle-->
+</div>
+<div class="col-md-6 col-xl-4  mb-3">
+    <div class="widget-rounded-circle card-box h-100">
+        <div class="row">
+            <div class="card">
+                <div class="card-header">Active Booth Users</div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Location Name</th>
+                                <th>Number of Users</th>
+                            </tr>
+                        </thead>
+                        <tbody class="botthUSer">
+                            <td colspan="2"><center>No Data Available</center></td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div> <!-- end row-->
+    </div> <!-- end widget-rounded-circle-->
+</div>
+     <!-- <div class="col-12">
+        <div class="page-title-box">
+            <h4 class="page-title">List of latest users who logged in (Last 50)</h4>
+        </div>
+    </div>
+    <div class="col-12">
+        <ul class="list-group" id="list-of-last-users">
+        </ul>
+    </div>  -->
+    <div class="col-md-6 col-xl-4  mb-3">
+        <div class="widget-rounded-circle card-box h-100">
+            <div class="row">
+
+                <div class="card">
+                    <div class="card-header">Active Lobby Users</div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Total User</th>
+                                </tr>
+                            </thead>
+                            <tbody class="lobbyUser">
+                                <td colspan="2"><center>No Data Available</center></td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-4  mb-3">
+        <div class="widget-rounded-circle card-box h-100">
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">Active Lounge Users</div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Total User</th>
+                                </tr>
+                            </thead>
+                            <tbody class="loungeUser">
+                                <td colspan="2"><center>No Data Available</center></td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+{%  endblock  %}
+
+{% if current_user.role_id == 1 %}
+{%   block scripts   %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+    //User Chart
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart(obj,total) {
+          console.log(obj.offline);
+        if(total == 0){
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Users: ' +0+'',15]
+            
+            ]);
+        }
+        else{
+            var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Online Users: '+obj.online+'',obj.online],
+            ['Offline Users: ' +obj.offline+'',obj.offline]
+            
+            ]);
+        }
+        
+        
+        var options = {
+          title: 'Online Users'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    <script>
+        $(document).ready(function(){
+
+
+            //User Chart
+            $.ajax({
+                url:"{{ url_for('ChartJs') }}",
+                method:"POST",
+                data:{id:"{{ event_id }}"},
+                success:function(response){
+                    drawChart(response.userobj,response.total);
+
+                }
+            });
+            //Session Chart
+            $.ajax({
+                url:"{{ url_for('SessionChartJs') }}",
+                method:"POST",
+                data:{id:"{{ event_id }}"},
+                success:function(response){
+                    // console.log(response);
+                    $('.sesroomUSer').empty();
+                    if(response.length > 0)
+                    {
+                        $.each(response,function(key,value){
+                            $('.sesroomUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+                        });
+                    }
+                    else{
+                        $('.sesroomUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                    }
+
+                    drawPieChart(response);
+
+                }
+            });
+            //Page Chart
+            $.ajax({
+                url:"{{ url_for('PageChart') }}",
+                method:"POST",
+                data:{id:"{{ event_id }}"},
+                success:function(response){
+                    // console.log(response);
+                    if(response.length > 0)
+                    {
+                        $.each(response,function(key,value){
+                            $('.pageUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+                        });
+                    }
+                    else{
+                        $('.pageUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                    }
+                    drawPageChart(response);
+
+                }
+            });
+            //Booth Chart
+            $.ajax({
+                url:"{{  url_for('BoothChart') }}",
+                method:"POST",
+                data:{id:"{{ event_id }}"},
+                success:function(response){
+                    // console.log(response);
+                    if(response.length > 0)
+                    {
+                        $.each(response,function(key,value){
+                            $('.botthUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+                        });
+                    }
+                    else{
+                        $('.botthUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                    }
+
+                }
+            });
+
+            //Lobby User
+            $.ajax({
+                url:"{{ url_for('LobbyUser') }}",
+                method:"POST",
+                data:{id:"{{ event_id }}"},
+                success:function(response){
+                    // console.log(response);
+                    if(response.length > 0){
+                        $('.lobbyUser').empty();
+                        $.each(response,function(key,value){
+                            $('.lobbyUser').append('<tr><td>'+ value.name +'</td><td>'+ value.time +'</td></tr>');
+                        });
+                    }
+
+
+
+                }
+            });
+
+            //Lounge User
+            $.ajax({
+                url:"{{ url_for('LoungeUser') }}",
+                method:"POST",
+                data:{id:"{{ event_id }}"},
+                success:function(response){
+                    // console.log(response);
+                    if(response.length > 0){
+                        $('.loungeUser').empty();
+                        $.each(response,function(key,value){
+                            $('.loungeUser').append('<tr><td>'+ value.name +'</td><td>'+ value.time +'</td></tr>');
+                        });
+                    }
+
+
+
+                }
+            });
+
+                    setInterval(function(){
+                        //User Chart
+                        $.ajax({
+                            url:"{{ url_for('ChartJs') }}",
+                            method:"POST",
+                            data:{id:"{{ event_id }}"},
+                            success:function(response){
+                                drawChart(response.userobj,response.total);
+                                // console.log(1);
+                            }
+                        });
+                        //Session Chart
+                        $.ajax({
+                            url:"{{ url_for('SessionChartJs') }}",
+                            method:"POST",
+                            data:{id:"{{ event_id }}"},
+                            success:function(response){
+                                // console.log(response);
+                                if(response.locations.length > 0){
+                                    $.each(response.locations,function(key,value){
+                                        $('.sesroomUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+                                    });
+                                }
+                                else{
+                                    $('.sesroomUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                                }
+
+                            }
+                        });
+                        //Page Chart
+                        $.ajax({
+                            url:"{{ url_for('PageChart') }}",
+                            method:"POST",
+                            data:{id:"{{ event_id }}"},
+                            success:function(response){
+                                // console.log(response);
+                                if(response.locations.length > 0)
+                                {
+                                    $.each(response.locations,function(key,value){
+                                        $('.pageUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+                                    });
+                                }
+                                else{
+                                    $('.pageUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                                }
+                                drawPageChart(response);
+
+                            }
+                        });
+                        //Booth Chart
+                        $.ajax({
+                            url:"{{ url_for('BoothChart') }}",
+                            method:"POST",
+                            data:{id:"{{ event_id }}"},
+                            success:function(response){
+                                // console.log(response);
+                                if(response.locations.length > 0)
+                                {
+                                    $.each(response.locations,function(key,value){
+                                        $('.botthUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+                                    });
+                                }
+                                else{
+                                    $('.botthUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                                }
+                                drawBoothChart(response);
+
+                            }
+                        });
+                        //Lobby User
+                        $.ajax({
+                            url:"{{ url_for('LobbyUser') }}",
+                            method:"POST",
+                            data:{id:"{{ event_id }}"},
+                            success:function(response){
+                                // console.log(response);
+                                if(response.locations.length > 0){
+                                    $('.lobbyUser').empty();
+                                    $.each(response.locations,function(key,value){
+                                        $('.lobbyUser').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+                                    });
+                                }
+                                else{
+                                    $('.lobbyUser').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                                }
+                            }
+                        });
+
+                         //Lounge User
+                            $.ajax({
+                                url:"{{ url_for('LoungeUser') }}",
+                                method:"POST",
+                                data:{id:"{{ event_id }}"},
+                                success:function(response){
+                                    // console.log(response);
+                                    if(response.locations.length > 0){
+                                        $('.loungeUser').empty();
+                                        $.each(response.locations,function(key,value){
+                                            $('.loungeUser').append('<tr><td>'+ value.room_count +'</td><td>'+ value.room_count +'</td></tr>');
+                                        });
+                                    }
+                                    else{
+                                        $('.loungeUser').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+                                    }
+
+
+
+                                }
+                            });
+                    }, 5000);
+
+
+
+
+        });
+    </script>
+{%  endblock   %}
+{% endif %}
