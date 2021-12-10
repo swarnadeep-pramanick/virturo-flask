@@ -42,12 +42,13 @@ class User(db.Model, UserMixin):
     is_active = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime(), default=datetime.now())
 
-    def __init__(self, first_name, last_name, email, password, role_id):
+    def __init__(self, first_name, last_name, email, password, role_id, event_id=None):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.password = generate_password_hash(password)
         self.role_id = role_id
+        self.event_id = event_id
 
     def checkpassword(self, password):
         if check_password_hash(self.password, password):

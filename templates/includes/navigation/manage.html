@@ -9,3 +9,252 @@
     </a>
 </li>
 
+<li class="menu-title">Administration</li>
+<li>
+    <a href="#users" data-toggle="collapse">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        <span> Users</span>
+    </a>
+    <div class="collapse" id="users">
+        <ul class="nav-second-level">
+            <li>
+                <a href="{{ url_for('EventUser',event_id=event_id)  }}">Manage</a>
+            </li>
+           
+            <li>
+                <a href="{{ url_for('EventUserCreate',event_id=event_id) }}">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+<li>
+    <a href="#faq" data-toggle="collapse">
+        <i class="fas fa-question-circle"></i>
+        <span> FAQ</span>
+    </a>
+    <div class="collapse" id="faq">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#" }}">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#mail" data-toggle="collapse">
+        <i class="fa fa-envelope" aria-hidden="true"></i>
+        <span> Mail</span>
+    </a>
+    <div class="collapse" id="mail">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#">New Mail</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#userReport" data-toggle="collapse">
+        <i class="fa fa-file" aria-hidden="true"></i>
+        <span> User Report</span>
+    </a>
+    <div class="collapse" id="userReport">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Get Report</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+</li>
+<li>
+    <a href="#notification" data-toggle="collapse" >
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        <span> Notifications</span>
+    </a>
+    <div class="collapse" id="notification">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+
+
+
+<li>
+    <a href="#"  class="nav-second-level">
+        <span>
+           Licence Upgrade
+        </span>
+    </a>
+</li>
+
+
+
+<li class="menu-title">Site Content</li>
+
+
+<li>
+    <a href="#settings" data-toggle="collapse">
+        <i class="fa fa-cog"></i>
+        <span> Settings</span>
+    </a>
+    <div class="collapse" id="settings">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">
+                    <span> General Content</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span> Integrations </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span> Leaderboard Setting </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span> Default Settings </span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#menu" data-toggle="collapse">
+        <i class="fa fa-bars"></i>
+        <span> Menu</span>
+    </a>
+    <div class="collapse" id="menu">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage Nav</a>
+            </li>
+            <li>
+                <a href="#">Manage Footer</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#booths" data-toggle="collapse">
+        <i class="fas fa-border-all"></i>
+        <span> Booths </span>
+    </a>
+    <div class="collapse" id="booths">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<!--
+<li>
+    <a href="#lounge" data-toggle="collapse">
+        <i data-feather="grid"></i>
+        <span> Lounge </span>
+    </a>
+    <div class="collapse" id="lounge">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#">Create</a>
+            </li>
+        </ul>
+    </div>
+</li> -->
+
+<li>
+    <a href="#pages" data-toggle="collapse">
+        <i class="mdi mdi-file-multiple"></i>
+        <span> Pages</span>
+    </a>
+    <div class="collapse" id="pages">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#">Create</a>
+            </li>
+            <li>
+                <a href="#">Lobby</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<li>
+    <a href="#sessions" data-toggle="collapse">
+        <i class="mdi mdi-play"></i>
+        <span> Sessions</span>
+    </a>
+    <div class="collapse" id="sessions">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#">Create</a>
+            </li>
+        </ul>
+    </div>
+</li>
+<!-- <li>
+    <a href="#sessionrooms" data-toggle="collapse">
+        <i  data-feather="home"></i>
+        <span> Session Rooms</span>
+    </a>
+    <div class="collapse" id="sessionrooms">
+        <ul class="nav-second-level">
+            <li>
+                <a href="#">Manage</a>
+            </li>
+            <li>
+                <a href="#">Create</a>
+            </li>
+        </ul>
+    </div>
+</li> -->
+
+<!-- <li class="menu-title">Reporting & Analytics</li>
+
+<li>
+    <a href="#report" data-toggle="collapse">
+        <i class="mdi mdi-file-multiple"></i>
+        <span> Reports <span class="badge  badge-success" >NEW</span> </span>
+    </a>
+    <div class="collapse" id="report">
+        <ul class="nav-second-level">
+             <!-- <li>
+                <a href="#">General</a>
+            </li
+            <li>
+                <a href="#">Leaderboard</a>
+            </li>
+        </ul>
+    </div>
+</li> -->

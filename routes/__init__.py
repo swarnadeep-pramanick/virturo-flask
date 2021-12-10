@@ -2,7 +2,7 @@ from app.app import app, login_manager, db
 from flask import render_template, Response, request, url_for, flash, jsonify
 from forms import LoginForm, RegistrationForm
 from flask import request, redirect, session
-from flask_login import login_required, login_user, current_user
+from flask_login import login_required, login_user, current_user, logout_user
 from datetime import datetime, timedelta, date
 import routes.errorhandler
 
@@ -23,6 +23,9 @@ def index():
         return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
+#####################
+####AUTH#############
+#####################
 
 
 @app.route('/login')
@@ -73,6 +76,14 @@ def confirm_register():
                 flash("Same Email Address Already Exist")
                 return redirect(url_for('register'))
 
+
+@app.route('/logout')
+@login_required
+def Logout():
+    is_live(current_user.id, 0)
+    logout_user()
+    return redirect(url_for('login'))
+
 ###############################
 ####Eventee Dashboard#########
 ##############################
@@ -86,16 +97,16 @@ def dashboard():
     year = datetime.today().strftime('%Y')
     events = Event.query.filter_by(user_id=current_user.id).count()
     today = date.today()
-    print(today)
+
     liveEvent = Event.query.filter(
         Event.end_date >= today).filter(Event.user_id == current_user.id).count()
     result = text(
         f"SELECT * FROM events where user_id ={current_user.id} and date(created_at) = '{date.today()}' ")
-    # print(result)
+
     rec = db.engine.execute(result)
-    print(rec)
+
     recent = [row[2] for row in rec]
-    print(recent)
+
     todayEvent = Event.query.filter(
         Event.start_date == today, Event.user_id == user.id).count()
     ending_event_today = Event.query.filter(
@@ -171,4 +182,6 @@ def EventUpdate(event_id):
 @app.route('/events/manage/<event_id>')
 @login_required
 def EventDashboard(event_id):
+    event = Event.query.filter_by(id=event_id).first()
+    session['event_name'] = event.name
     return render_template('eventee/dashboard.html', event_id=event_id)

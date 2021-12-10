@@ -171,7 +171,7 @@
             var data = google.visualization.arrayToDataTable([
                 ['Task', 'Hours per Day'],
                 ['Users: ' +0+'',15]
-            
+
             ]);
         }
         else{
@@ -179,11 +179,11 @@
             ['Task', 'Hours per Day'],
             ['Online Users: '+obj.online+'',obj.online],
             ['Offline Users: ' +obj.offline+'',obj.offline]
-            
+
             ]);
         }
-        
-        
+
+
         var options = {
           title: 'Online Users'
         };
@@ -203,6 +203,7 @@
                 method:"POST",
                 data:{id:"{{ event_id }}"},
                 success:function(response){
+                    console.log(response.userobj);
                     drawChart(response.userobj,response.total);
 
                 }
@@ -307,121 +308,121 @@
                 }
             });
 
-                    setInterval(function(){
-                        //User Chart
-                        $.ajax({
-                            url:"{{ url_for('ChartJs') }}",
-                            method:"POST",
-                            data:{id:"{{ event_id }}"},
-                            success:function(response){
-                                drawChart(response.userobj,response.total);
-                                // console.log(1);
-                            }
-                        });
-                        //Session Chart
-                        $.ajax({
-                            url:"{{ url_for('SessionChartJs') }}",
-                            method:"POST",
-                            data:{id:"{{ event_id }}"},
-                            success:function(response){
-                                // console.log(response);
-                                if(response.locations.length > 0){
-                                    $.each(response.locations,function(key,value){
-                                        $('.sesroomUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
-                                    });
-                                }
-                                else{
-                                    $('.sesroomUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
-                                }
-
-                            }
-                        });
-                        //Page Chart
-                        $.ajax({
-                            url:"{{ url_for('PageChart') }}",
-                            method:"POST",
-                            data:{id:"{{ event_id }}"},
-                            success:function(response){
-                                // console.log(response);
-                                if(response.locations.length > 0)
-                                {
-                                    $.each(response.locations,function(key,value){
-                                        $('.pageUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
-                                    });
-                                }
-                                else{
-                                    $('.pageUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
-                                }
-                                drawPageChart(response);
-
-                            }
-                        });
-                        //Booth Chart
-                        $.ajax({
-                            url:"{{ url_for('BoothChart') }}",
-                            method:"POST",
-                            data:{id:"{{ event_id }}"},
-                            success:function(response){
-                                // console.log(response);
-                                if(response.locations.length > 0)
-                                {
-                                    $.each(response.locations,function(key,value){
-                                        $('.botthUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
-                                    });
-                                }
-                                else{
-                                    $('.botthUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
-                                }
-                                drawBoothChart(response);
-
-                            }
-                        });
-                        //Lobby User
-                        $.ajax({
-                            url:"{{ url_for('LobbyUser') }}",
-                            method:"POST",
-                            data:{id:"{{ event_id }}"},
-                            success:function(response){
-                                // console.log(response);
-                                if(response.locations.length > 0){
-                                    $('.lobbyUser').empty();
-                                    $.each(response.locations,function(key,value){
-                                        $('.lobbyUser').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
-                                    });
-                                }
-                                else{
-                                    $('.lobbyUser').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
-                                }
-                            }
-                        });
-
-                         //Lounge User
-                            $.ajax({
-                                url:"{{ url_for('LoungeUser') }}",
-                                method:"POST",
-                                data:{id:"{{ event_id }}"},
-                                success:function(response){
-                                    // console.log(response);
-                                    if(response.locations.length > 0){
-                                        $('.loungeUser').empty();
-                                        $.each(response.locations,function(key,value){
-                                            $('.loungeUser').append('<tr><td>'+ value.room_count +'</td><td>'+ value.room_count +'</td></tr>');
-                                        });
-                                    }
-                                    else{
-                                        $('.loungeUser').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
-                                    }
-
-
-
-                                }
-                            });
-                    }, 5000);
-
-
-
-
-        });
+        //             setInterval(function(){
+        //                 //User Chart
+        //                 $.ajax({
+        //                     url:"{{ url_for('ChartJs') }}",
+        //                     method:"POST",
+        //                     data:{id:"{{ event_id }}"},
+        //                     success:function(response){
+        //                         drawChart(response.userobj,response.total);
+        //                         // console.log(1);
+        //                     }
+        //                 });
+        //                 //Session Chart
+        //                 $.ajax({
+        //                     url:"{{ url_for('SessionChartJs') }}",
+        //                     method:"POST",
+        //                     data:{id:"{{ event_id }}"},
+        //                     success:function(response){
+        //                         // console.log(response);
+        //                         if(response.locations.length > 0){
+        //                             $.each(response.locations,function(key,value){
+        //                                 $('.sesroomUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+        //                             });
+        //                         }
+        //                         else{
+        //                             $('.sesroomUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+        //                         }
+        //
+        //                     }
+        //                 });
+        //                 //Page Chart
+        //                 $.ajax({
+        //                     url:"{{ url_for('PageChart') }}",
+        //                     method:"POST",
+        //                     data:{id:"{{ event_id }}"},
+        //                     success:function(response){
+        //                         // console.log(response);
+        //                         if(response.locations.length > 0)
+        //                         {
+        //                             $.each(response.locations,function(key,value){
+        //                                 $('.pageUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+        //                             });
+        //                         }
+        //                         else{
+        //                             $('.pageUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+        //                         }
+        //                         drawPageChart(response);
+        //
+        //                     }
+        //                 });
+        //                 //Booth Chart
+        //                 $.ajax({
+        //                     url:"{{ url_for('BoothChart') }}",
+        //                     method:"POST",
+        //                     data:{id:"{{ event_id }}"},
+        //                     success:function(response){
+        //                         // console.log(response);
+        //                         if(response.locations.length > 0)
+        //                         {
+        //                             $.each(response.locations,function(key,value){
+        //                                 $('.botthUSer').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+        //                             });
+        //                         }
+        //                         else{
+        //                             $('.botthUSer').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+        //                         }
+        //                         drawBoothChart(response);
+        //
+        //                     }
+        //                 });
+        //                 //Lobby User
+        //                 $.ajax({
+        //                     url:"{{ url_for('LobbyUser') }}",
+        //                     method:"POST",
+        //                     data:{id:"{{ event_id }}"},
+        //                     success:function(response){
+        //                         // console.log(response);
+        //                         if(response.locations.length > 0){
+        //                             $('.lobbyUser').empty();
+        //                             $.each(response.locations,function(key,value){
+        //                                 $('.lobbyUser').append('<tr><td>'+ value.room_name +'</td><td>'+ value.room_count +'</td></tr>');
+        //                             });
+        //                         }
+        //                         else{
+        //                             $('.lobbyUser').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+        //                         }
+        //                     }
+        //                 });
+        //
+        //                  //Lounge User
+        //                     $.ajax({
+        //                         url:"{{ url_for('LoungeUser') }}",
+        //                         method:"POST",
+        //                         data:{id:"{{ event_id }}"},
+        //                         success:function(response){
+        //                             // console.log(response);
+        //                             if(response.locations.length > 0){
+        //                                 $('.loungeUser').empty();
+        //                                 $.each(response.locations,function(key,value){
+        //                                     $('.loungeUser').append('<tr><td>'+ value.room_count +'</td><td>'+ value.room_count +'</td></tr>');
+        //                                 });
+        //                             }
+        //                             else{
+        //                                 $('.loungeUser').html('<tr><td colspan="2"><center>No Data Available</center></td></tr>');
+        //                             }
+        //
+        //
+        //
+        //                         }
+        //                     });
+        //             }, 5000);
+        //
+        //
+        //
+        //
+         });
     </script>
 {%  endblock   %}
 {% endif %}
