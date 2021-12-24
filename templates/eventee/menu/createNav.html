@@ -1,0 +1,178 @@
+{%  extends 'layout/admin.html'   %}
+
+{% block title  %}
+Create Nav
+{%  endblock   %}
+
+{%block styles %}
+    {% include 'includes/styles/datatables.html'  %}
+    
+{%  endblock %}
+{%  block page_title  %}
+Frequently Asked Questions
+{% endblock  %}
+<!-- include libraries(jQuery, bootstrap) -->
+
+<!-- include summernote css/js -->
+
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active">Navbar</li>
+    <li class="breadcrumb-item active">Create</li>
+{% endblock  %}
+
+{%block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <form action="#" method="post">
+                   
+
+                    <!-- Name -->
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Name:</label>
+                            <input type="text" required class="form-control" id="recipient-name" name="name">
+                            
+                        </div>
+                    <!-- End Name  -->
+
+                    <!-- Type of Link -->
+                    
+                        <div class="form-group mb-3 col-md-4">
+                            <label for="type">type</label>
+                            <select required class="form-control type" name="type" required>
+                                {%  for type in types   %}
+                                <option value="{{type}}">{{type}}</option>
+                                {% endfor  %}
+                            </select>
+                        </div>
+                    <!-- end type -->
+                    
+                  
+
+
+                    <!-- To Link Start  -->
+
+                        <div class="pages-${n} pages form-group mb-3 col-md-4">
+                            <label for="to">to(Page)</label>
+                            <select value=" " class="form-control" name="pages">
+                                <option selected value=" ">Select Page to Redirect to</option>
+                               {% if pages %}
+                               {% for page in pages %}
+                                    <option value="{{page.name}}">{{page.name}}</option>
+                                {% endfor %}
+
+                                {%  else  %}
+                                <option value="0">No Data Available</option>
+                               {% endif %}
+                                
+                                
+                                
+                               
+                            </select>
+                        </div>
+
+                        <div style="display: none;" class=" booth form-group mb-3 col-md-4">
+                            <label for="to">to(Booth)</label>
+                            <select class="form-control" name="booths">
+                               {% if booths %}
+                                   {% for booth in booths %}
+                                   <option value="{{booth.name}}">{{booth.name}}</option>
+                                   {% endfor %}
+                                {%  else  %}
+                                    <option value="0">No Data Available</option>
+                               {% endif %}
+
+                            </select>
+                        </div>
+
+                        <div style="display: none;" class="room form-group mb-3 col-md-4">
+                            <label for="to">to(Session Room)</label>
+                            <select value=" " class="form-control" name="rooms">
+                                <option selected value=" ">Select Session Room</option>
+                               {% if rooms %}
+                                    {%  for room in rooms   %}
+                                            <option value="{{room.name}}">{{room.name}}</option>
+                                    {%  endfor  %}
+                                {%  else   %}
+                                <option value="0">No Data Available</option>
+                               {% endif %}
+                                
+                            </select>
+                        </div>
+
+                        <div style="display: none;" class=" zoom form-group mb-3 col-md-4">
+                            <label for="zoom">Zoom/External Link</label>
+                            <input type="text" name="zoom" class="form-control">
+                        </div>
+
+                        <div style="display: none;" class="vimeo form-group mb-3 col-md-4">
+                            <label for="vimeo">Vimeo Url</label>
+                            <input type="text" name="vimeo" class="form-control">
+                        </div>
+
+                        <div style="display: none;" class="  pdf  mb-3 col-md-4">
+                            <div class="image-uploader">
+                                <label for="pdf">PDF </label>
+                                <input type="hidden" name="pdf" class="upload_input">
+                                <input type="file" data-name="pdfs" data-plugins="dropify" data-type="application/pdf" />
+                            </div>
+                        </div>
+                        <div style="display: none;" class=" chat_user form-group mb-3 col-md-4">
+                            <label for="chat_user">Chat User ID</label>
+                            <input type="text" name="chatuser" class="form-control">
+                        </div>
+                        <div style="display: none;" class=" chat_group form-group mb-3 col-md-4">
+                            <label for="chat_group">Chat Group ID</label>
+                            <input type="text" name="chatgroup" class="form-control">
+                        </div>
+
+                        <div style="display: none;" class=" custom_page form-group mb-3 col-md-4">
+                            <label for="custom_page">Custom Page route</label>
+                            <input type="text" name="custom_page" class="form-control">
+                        </div>
+
+                    <!-- To Link End -->
+
+                    <!-- Icon Select Start  -->
+                    
+
+                    
+
+
+                    <!-- Icon Select End -->
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock  %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#summernote-basic-2').summernote({
+                placeholder: 'Write something...',
+                height: 230,
+                maximumImageFileSize: 500*1024, // 500 KB
+                callbacks: {
+                    // fix broken checkbox on link modal
+                    onInit: function onInit(e) {
+                        var editor = $(e.editor);
+                        editor.find('.custom-control-description').addClass('custom-control-label').parent().removeAttr('for');
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock  %}

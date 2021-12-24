@@ -1,0 +1,104 @@
+{%  extends 'layout/admin.html'   %}
+
+{% block title  %}
+  FAQ
+{%  endblock   %}
+
+{%block styles %}
+    {% include 'includes/styles/datatables'  %}
+{%  endblock %}
+
+{%  block page_title  %}
+ Frequently Asked Questions
+{% endblock  %}
+<!-- include libraries(jQuery, bootstrap) -->
+
+<!-- include summernote css/js -->
+
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active">FAQ</li>
+{% endblock  %}
+
+
+{%block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between" >
+                <h3 class="card-title"><i class="fa fa-question-circle" aria-hidden="true"></i>&nbsp;&nbsp;Frequently Asked Questions</h3>
+                <a style="float: right" class="btn btn-primary" href="{{ url_for('CreateFaq',event_id=event_id) }}">Create New Faq</a>
+            </div>
+            <div class="card-body">
+              
+                <table class="table table-hover table-striped" id="user-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Question</th>
+                            <th>Created On</th>
+
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="faqtab">
+                        {% if faqs %}
+                            {%  for faq in faqs  %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ faq.question }}</td>
+                                <td>{{ faq.created_at.strftime('%d-%m-%Y') }}</td>
+
+                                <td>
+                                    <a href="{{ url_for('EditFaq',event_id = event_id,faq_id=faq.id) }}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                    <button onclick="deleteFaq(this)" data-id="{{ faq.id }}" class="btn btn-danger"><i class="fas fa-trash"></i></i></button>
+                                </td>
+                            </tr>
+                            {%  endfor  %}
+                        {%  else  %}
+                            <tr>
+                                <td colspan="4"><center>No Data Available</center></td>
+                            </tr>
+                        {%  endif   %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
+
+{% block scripts %}
+    <script>
+        $(document).ready( function () {
+            $('#user-table').DataTable();
+           
+        } );
+
+        function deleteFaq(e){
+            confirmDelete("Are you sure you want to DELETE Faq?","Confirm Faq Delete").then(confirmation=>{
+                if(confirmation){
+                    var faqid = e.getAttribute('data-id');
+                    var data = e.closest('tr');
+                    console.log(data)
+                    $.post('{{ url_for("DeleteFaq") }}',{'id':faqid,'event_id':"{{ event_id }}"},function(response){
+                        //console.log(response)
+                        if(response.code == 200){
+                            data.remove();
+                            showMessage(response.message,'success');
+                            if(response.faqCount < 1){
+                                $('.faqtab').html("<tr><td colspan='4'><center>No Data Available</center></td></tr>");
+                            }
+                        }
+                        else{
+                            showMessage(response.message,'error');
+                        }
+      
+      
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock  %}

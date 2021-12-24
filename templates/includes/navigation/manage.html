@@ -36,10 +36,10 @@
     <div class="collapse" id="faq">
         <ul class="nav-second-level">
             <li>
-                <a href="#">Manage</a>
+                <a href="{{ url_for('EventFaq',event_id=event_id) }}">Manage</a>
             </li>
             <li>
-                <a href="#" }}">Create</a>
+                <a href="{{ url_for('CreateFaq',event_id=event_id) }}" }}">Create</a>
             </li>
         </ul>
     </div>
@@ -146,10 +146,10 @@
     <div class="collapse" id="menu">
         <ul class="nav-second-level">
             <li>
-                <a href="#">Manage Nav</a>
+                <a href="{{ url_for('EventNav',event_id=event_id) }}">Manage Nav</a>
             </li>
             <li>
-                <a href="#">Manage Footer</a>
+                <a href="{{ url_for('CreateNav',event_id=event_id) }}">Manage Footer</a>
             </li>
         </ul>
     </div>

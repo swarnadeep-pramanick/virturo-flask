@@ -22,6 +22,10 @@ def ChartJs():
     online_user = User.query.filter_by(event_id=event.id, is_active=1).count()
     offline_user = User.query.filter_by(event_id=event.id, is_active=0).count()
     total = User.query.filter_by(event_id=event.id).count()
+    if online_user < 1:
+        online_user = 0
+    if offline_user < 1:
+        offline_user = 0
     userobj = {'online_user': online_user, 'offline_user': offline_user}
     return jsonify({'userobj': userobj, 'total': total})
 

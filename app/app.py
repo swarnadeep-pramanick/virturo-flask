@@ -14,6 +14,11 @@ app.debug = True
 app.secret_key = "asdkjashdkjasdknamksdfldshfksnfmnasdfklhasdfasdf"
 app.permanent_session_lifetime = timedelta(minutes=30)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/eventdb'
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_size': 50,
+    'pool_recycle': 120,
+    'pool_pre_ping': True
+}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # app.config["SESSION_PERMANENT"] = False
@@ -21,6 +26,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 db = SQLAlchemy(app)
+
 login_manager = LoginManager()
 login_manager.login_view = 'login'
 # login_manager.session_protection = None

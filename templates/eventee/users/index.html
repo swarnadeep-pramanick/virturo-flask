@@ -39,27 +39,26 @@ Users
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email Address</th>
-                            <th>Phone Number</th>
+                            <!-- <th>Phone Number</th> -->
                             <th>joined On</th>
 
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="usertab">
                         {% if users %}
                             {%  for user in users  %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ users.first_name }}</td>
+                                <td>{{ user.first_name }}</td>
                                 <td>{{ user.last_name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ user.phone }}</td>
+                                <!-- <td>{{ user.phone }}</td> -->
                                 <td>{{ user.created_at.strftime('%d-%m-%Y') }}</td>
 
                                 <td>
-                                    <a href="#" class="btn btn-info"><i class="fas fa-edit"></i></a>
-                                    <a href="#" class="btn btn-warning"><i class="fas fa-tasks"></i></a>
-                                    <button onclick="deleteEvent(this)" data-id="{{ user.id }}" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                    <a href="{{ url_for('UserEdit',event_id = event_id,user_id=user.id) }}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                    <button onclick="deleteUser(this)" data-id="{{ user.id }}" class="btn btn-danger"><i class="fas fa-trash"></i></i></button>
                                 </td>
                             </tr>
                             {%  endfor  %}
@@ -82,5 +81,30 @@ Users
             $('#user-table').DataTable();
            
         } );
+
+        function deleteUser(e){
+            confirmDelete("Are you sure you want to DELETE User?","Confirm User Delete").then(confirmation=>{
+                if(confirmation){
+                    var userid = e.getAttribute('data-id');
+                    var data = e.closest('tr');
+                    console.log(data)
+                    $.post('{{ url_for("UserDelete") }}',{'id':userid,'event_id':"{{ event_id }}"},function(response){
+                        //console.log(response)
+                        if(response.code == 200){
+                            data.remove();
+                            showMessage(response.message,'success');
+                            if(response.userCount < 1){
+                                $('.usertab').html("<tr><td colspan='9'><center>No Data Available</center></td></tr>");
+                            }
+                        }
+                        else{
+                            showMessage(response.message,'error');
+                        }
+      
+      
+                    });
+                }
+            });
+        }
     </script>
 {% endblock  %}

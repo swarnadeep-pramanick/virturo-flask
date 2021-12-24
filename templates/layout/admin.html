@@ -11,7 +11,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- App favicon -->
-
+<!-- include summernote css/js -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
     {% block style %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')  }}" type="text/css">
@@ -22,7 +23,7 @@
     <link rel="stylesheet" href="https://coderthemes.com/ubold/layouts/assets/libs/nestable2/jquery.nestable.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
     <link rel="stylesheet" href="cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
-
+    {% include 'includes/styles/wyswyg.html'  %}
     <!-- icons -->
     <link rel="stylesheet" href="{{  url_for('static', filename='css/icons.min.css')  }}" type="text/css">
     <style>
@@ -95,6 +96,20 @@
             padding: 22px;
             display: block;
             color: white;
+        }
+        .slugInp{
+            width: 85%;
+            border: 1px solid grey;
+            height: calc(1.5rem+ 0.9rem+ 2px);
+            padding: 0.45rem 0.9rem;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.2rem;
+        }
+        #event_link{
+            font-weight: 700;
+            white-space: nowrap;
         }
     </style>
     {% endblock style %}

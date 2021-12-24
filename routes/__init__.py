@@ -6,7 +6,7 @@ from flask_login import login_required, login_user, current_user, logout_user
 from datetime import datetime, timedelta, date
 import routes.errorhandler
 
-from model.db import User, Event
+from model.db import User, Event, Menu, Content
 from helper import is_live
 from sqlalchemy import text
 #Routing
@@ -141,11 +141,35 @@ def EventCreate():
         end_date = request.form['end_date']
         link = f"{event_slug}.localhost:5000"
         existEve = Event.query.filter_by(slug=event_slug).first()
+        menus = ['lobby', 'schedule', 'lounge', 'library',
+                 'swagbag', 'leaderboard', 'personalagenda']
+        iclasses = ['fa fa-home', 'fe-calendar', 'fe-home',
+                    'fe-folder', 'fe-shopping-bag', 'fe-bar-chart', 'fe-home']
+        fields = ['login_background', 'lobby_background',
+                  'exterior_background_image', 'exterior_background_video', 'favicon', 'logo']
+        type_flieds = ['image', 'image', 'image', 'video', 'image', 'image']
         if not existEve:
             event = Event(event_name, event_slug, current_user.id,
                           link, start_date, end_date)
+
             db.session.add_all([event])
             db.session.commit()
+            try:
+                i = 1
+                for names, iclass in zip(menus, iclasses):
+                    menu = Menu(name=names, parent_id=0,
+                                event_id=event.id, position=i, link='perm', iClass=iclass, type='nav')
+                    db.session.add(menu)
+                    db.session.commit()
+                for fieldlist, typelist in zip(fields, type_flieds):
+                    content = Content(field=fieldlist, type=typelist)
+                    db.session.add(content)
+                    db.session.commit()
+
+            except:
+                Event.query.filter_by(id=event.id).delete()
+                flash('Something Went Wrong')
+                return redirect(url_for('Eventlist'))
             flash("Event Created Successfully")
             return redirect(url_for('Eventlist'))
         else:
@@ -183,5 +207,6 @@ def EventUpdate(event_id):
 @login_required
 def EventDashboard(event_id):
     event = Event.query.filter_by(id=event_id).first()
-    session['event_name'] = event.name
+    if event:
+        session['event_name'] = event.name
     return render_template('eventee/dashboard.html', event_id=event_id)

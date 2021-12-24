@@ -78,7 +78,7 @@
                                 <td>
                                     <a href="{{ url_for('EventEdit',event_id = event.id) }}" class="btn btn-info"><i class="fas fa-edit"></i></a>
                                     <a href="{{ url_for('EventDashboard',event_id = event.id)  }}" class="btn btn-warning"><i class="fas fa-tasks"></i></a>
-                                    <button onclick="deleteEvent(this)" data-id="{{ event.id }}" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                    <button onclick="deleteEvent(this)" data-id="{{ event.id }}" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
                             {%  endfor  %}
@@ -166,7 +166,7 @@
     }
 
     function deleteEvent(e){
-      confirmDelete("Are you sure you want to DELETE Prize?","Confirm Prize Delete").then(confirmation=>{
+      confirmDelete("Are you sure you want to DELETE Event?","Confirm Event Delete").then(confirmation=>{
           if(confirmation){
               var eventId = e.getAttribute('data-id');
               var data = e.closest('tr');
