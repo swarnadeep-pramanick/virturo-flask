@@ -55,7 +55,7 @@ def confirm_login():
 
 @app.route('/register')
 def register():
-    form = RegistrationForm(request.form)
+    form = RegistrationForm()
     return render_template('users/register.html', form=form)
 
 
@@ -63,18 +63,18 @@ def register():
 def confirm_register():
     if request.method == "POST":
         form = RegistrationForm(request.form)
-        if form.validate_on_submit():
-            user = User.query.filter_by(email=form.email.data).first()
-            if not user:
-                user = User(form.first_name.data, form.last_name.data,
-                            form.email.data, form.password.data, 1)
-                db.session.add_all([user])
-                db.session.commit()
-                flash("New User Added Successfully")
-                return redirect(url_for("login"))
-            else:
-                flash("Same Email Address Already Exist")
-                return redirect(url_for('register'))
+        
+        user = User.query.filter_by(email=form.email.data).first()
+        if not user:
+            user = User(first_name = request.form['first_name'], last_name =request.form['last_name'],
+                        email = request.form['email'], password=request.form['password'], role_id = 1,phone = 9874368596)
+            db.session.add_all([user])
+            db.session.commit()
+            flash("New User Added Successfully")
+            return redirect(url_for("login"))
+        else:
+            flash("Same Email Address Already Exist")
+            return redirect(url_for('register'))
 
 
 @app.route('/logout')

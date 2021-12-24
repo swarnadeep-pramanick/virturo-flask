@@ -50,7 +50,7 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime())
     updated_at = db.Column(db.DateTime(), default=datetime.now())
 
-    def __init__(self, first_name, last_name, email, phone, country_id=0, password=None, role_id=1, event_id=None, created_at=datetime.now()):
+    def __init__(self, first_name, last_name, email, phone,password, country_id=0,  role_id=1, event_id=None, created_at=datetime.now()):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
