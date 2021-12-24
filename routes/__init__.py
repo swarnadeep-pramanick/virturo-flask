@@ -1,11 +1,12 @@
 from app.app import app, login_manager, db
-from flask import render_template, Response, request, url_for, flash
+from flask import render_template, Response, request, url_for, flash, jsonify
 from forms import LoginForm, RegistrationForm
 from flask import request, redirect, session
-from flask_login import login_required, login_user, current_user
+from flask_login import login_required, login_user, current_user, logout_user
 from datetime import datetime, timedelta, date
+import routes.errorhandler
 
-from model.db import User, Event
+from model.db import User, Event, Menu, Content
 from helper import is_live
 from sqlalchemy import text
 #Routing
@@ -22,6 +23,9 @@ def index():
         return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
+#####################
+####AUTH#############
+#####################
 
 
 @app.route('/login')
@@ -73,6 +77,18 @@ def confirm_register():
                 return redirect(url_for('register'))
 
 
+@app.route('/logout')
+@login_required
+def Logout():
+    is_live(current_user.id, 0)
+    logout_user()
+    return redirect(url_for('login'))
+
+###############################
+####Eventee Dashboard#########
+##############################
+
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
@@ -81,16 +97,16 @@ def dashboard():
     year = datetime.today().strftime('%Y')
     events = Event.query.filter_by(user_id=current_user.id).count()
     today = date.today()
-    print(today)
+
     liveEvent = Event.query.filter(
         Event.end_date >= today).filter(Event.user_id == current_user.id).count()
     result = text(
         f"SELECT * FROM events where user_id ={current_user.id} and date(created_at) = '{date.today()}' ")
-    # print(result)
+
     rec = db.engine.execute(result)
-    print(rec)
+
     recent = [row[2] for row in rec]
-    print(recent)
+
     todayEvent = Event.query.filter(
         Event.start_date == today, Event.user_id == user.id).count()
     ending_event_today = Event.query.filter(
@@ -125,24 +141,72 @@ def EventCreate():
         end_date = request.form['end_date']
         link = f"{event_slug}.localhost:5000"
         existEve = Event.query.filter_by(slug=event_slug).first()
+        menus = ['lobby', 'schedule', 'lounge', 'library',
+                 'swagbag', 'leaderboard', 'personalagenda']
+        iclasses = ['fa fa-home', 'fe-calendar', 'fe-home',
+                    'fe-folder', 'fe-shopping-bag', 'fe-bar-chart', 'fe-home']
+        fields = ['login_background', 'lobby_background',
+                  'exterior_background_image', 'exterior_background_video', 'favicon', 'logo']
+        type_flieds = ['image', 'image', 'image', 'video', 'image', 'image']
         if not existEve:
             event = Event(event_name, event_slug, current_user.id,
                           link, start_date, end_date)
+
             db.session.add_all([event])
             db.session.commit()
+            try:
+                i = 1
+                for names, iclass in zip(menus, iclasses):
+                    menu = Menu(name=names, parent_id=0,
+                                event_id=event.id, position=i, link='perm', iClass=iclass, type='nav')
+                    db.session.add(menu)
+                    db.session.commit()
+                for fieldlist, typelist in zip(fields, type_flieds):
+                    content = Content(field=fieldlist, type=typelist)
+                    db.session.add(content)
+                    db.session.commit()
+
+            except:
+                Event.query.filter_by(id=event.id).delete()
+                flash('Something Went Wrong')
+                return redirect(url_for('Eventlist'))
             flash("Event Created Successfully")
             return redirect(url_for('Eventlist'))
         else:
             flash("Same Event Already Exist")
             return redirect(url_for('EventCreate'))
 
-# ##Error Handling
-#
-#
+
+@app.route('/events/edit/<event_id>')
+@login_required
+def EventEdit(event_id):
+    event = Event.query.filter_by(id=event_id).first()
+    return render_template('eventee/event/edit.html', event=event)
 
 
-@login_manager.unauthorized_handler
-def unauthorized():
-    # do stuff
-    flash("Unauthorized")
-    return redirect(url_for('login'))
+@app.route('/events/update/<event_id>', methods=['POST'])
+@login_required
+def EventUpdate(event_id):
+
+    if request.method == 'POST':
+        event = Event.query.filter_by(id=event_id).first()
+        event.name = request.form['name']
+        event.slug = request.form['event_slug']
+        event.start_date = request.form['start_date']
+        event.end_date = request.form['end_date']
+        event.link = f"{request.form['event_slug']}.localhost:5000"
+        db.session.commit()
+        flash("Event Updated Successfully")
+        return redirect(url_for('Eventlist'))
+
+
+###########################
+##Event Dashboard#########
+##########################
+@app.route('/events/manage/<event_id>')
+@login_required
+def EventDashboard(event_id):
+    event = Event.query.filter_by(id=event_id).first()
+    if event:
+        session['event_name'] = event.name
+    return render_template('eventee/dashboard.html', event_id=event_id)

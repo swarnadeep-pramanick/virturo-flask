@@ -1,0 +1,110 @@
+{%  extends 'layout/admin.html'   %}
+
+{% block title  %}
+  Users
+{%  endblock   %}
+
+{%block styles %}
+    {% include 'includes/styles/datatables'  %}
+{%  endblock %}
+
+{%  block page_title  %}
+Users
+{% endblock  %}
+<!-- include libraries(jQuery, bootstrap) -->
+
+<!-- include summernote css/js -->
+
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active">Users</li>
+{% endblock  %}
+
+
+{%block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between" >
+                <h3 class="card-title"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Users</h3>
+                <a style="float: right" class="btn btn-primary" href="{{ url_for('EventUserCreate',event_id=event_id) }}">Create New User</a>
+            </div>
+            <div class="card-body">
+              
+                <table class="table table-hover table-striped" id="user-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email Address</th>
+                            <!-- <th>Phone Number</th> -->
+                            <th>joined On</th>
+
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="usertab">
+                        {% if users %}
+                            {%  for user in users  %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ user.first_name }}</td>
+                                <td>{{ user.last_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <!-- <td>{{ user.phone }}</td> -->
+                                <td>{{ user.created_at.strftime('%d-%m-%Y') }}</td>
+
+                                <td>
+                                    <a href="{{ url_for('UserEdit',event_id = event_id,user_id=user.id) }}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                    <button onclick="deleteUser(this)" data-id="{{ user.id }}" class="btn btn-danger"><i class="fas fa-trash"></i></i></button>
+                                </td>
+                            </tr>
+                            {%  endfor  %}
+                        {%  else  %}
+                            <tr>
+                                <td colspan="9"><center>No Data Available</center></td>
+                            </tr>
+                        {%  endif   %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock  %}
+
+{% block scripts %}
+    <script>
+        $(document).ready( function () {
+            $('#user-table').DataTable();
+           
+        } );
+
+        function deleteUser(e){
+            confirmDelete("Are you sure you want to DELETE User?","Confirm User Delete").then(confirmation=>{
+                if(confirmation){
+                    var userid = e.getAttribute('data-id');
+                    var data = e.closest('tr');
+                    console.log(data)
+                    $.post('{{ url_for("UserDelete") }}',{'id':userid,'event_id':"{{ event_id }}"},function(response){
+                        //console.log(response)
+                        if(response.code == 200){
+                            data.remove();
+                            showMessage(response.message,'success');
+                            if(response.userCount < 1){
+                                $('.usertab').html("<tr><td colspan='9'><center>No Data Available</center></td></tr>");
+                            }
+                        }
+                        else{
+                            showMessage(response.message,'error');
+                        }
+      
+      
+                    });
+                }
+            });
+        }
+    </script>
+{% endblock  %}
